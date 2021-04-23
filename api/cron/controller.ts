@@ -1,4 +1,6 @@
 import { Request, Response, Router } from "express";
+import { validateRequest } from "../util/validate-request";
+import { cronSchema } from "./schema";
 import { createCron, getCronDetails } from "./service";
 
 export async function handleCreateCron(req: Request, res: Response) {
@@ -27,7 +29,7 @@ export async function handleGetCronDetails(req: Request, res: Response) {
 
 export default function cronController(): Router {
   const router = Router();
-  router.post("/", handleCreateCron);
+  router.post("/", validateRequest("body", cronSchema), handleCreateCron);
   router.get("/:id", handleGetCronDetails);
   return router;
 }
