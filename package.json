@@ -1,0 +1,22 @@
+{
+  "name": "crony",
+  "version": "1.0.0",
+  "main": "index.js",
+  "license": "MIT",
+  "scripts": {
+    "start": "node ./build/server.js",
+    "build": "npx tsc",
+    "dev": "npx tsc-watch --onSuccess \"node ./build/server.js\""
+  },
+  "dependencies": {
+    "dotenv": "^8.2.0",
+    "express": "^4.17.1",
+    "mongodb": "^3.6.6",
+    "node-cron": "^3.0.0",
+    "yup": "^0.32.9"
+  },
+  "devDependencies": {
+    "@types/express": "^4.17.11",
+    "@types/mongodb": "^3.6.12"
+  }
+}
