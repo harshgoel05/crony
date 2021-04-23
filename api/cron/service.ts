@@ -31,20 +31,53 @@ export async function addCronLog(cronId: string, data: any): Promise<void> {
 
 export async function scheduleCronJob(data: any, cronId: any) {
   try {
-    nodecron.schedule("10 * * * * *", () => {
-      try {
-        console.log(data.script);
-        eval(data.script);
-        addCronLog(cronId, { status: "success", timestamp: +new Date() });
-      } catch (err) {
-        addCronLog(cronId, {
-          status: "failure",
-          timestamp: +new Date(),
-          error: err,
-        });
+    nodecron.schedule(
+      getCronSchedulePattern(data.interval, data.measure),
+      () => {
+        try {
+          console.log(data.script);
+          eval(data.script);
+          addCronLog(cronId, { status: "success", timestamp: +new Date() });
+        } catch (err) {
+          addCronLog(cronId, {
+            status: "failure",
+            timestamp: +new Date(),
+            error: err,
+          });
+        }
       }
-    });
+    );
   } catch (err) {
     console.log("Error scheduling");
+    throw { code: 500, message: "Couldn't schedule cron job" };
   }
+}
+export function getCronSchedulePattern(interval: number, measure: string) {
+  let pattern;
+  switch (measure) {
+    case "sec": {
+      pattern = `${interval} * * * * *`;
+      break;
+    }
+    case "hrs": {
+      pattern = `* ${interval} * * * *`;
+      break;
+    }
+    case "hrs": {
+      pattern = `* * ${interval} * * *`;
+      break;
+    }
+    case "month": {
+      pattern = `* * * * ${interval} *`;
+      break;
+    }
+    case "days": {
+      pattern = `* * * ${interval} * *`;
+      break;
+    }
+    default: {
+      throw { code: 500, message: "Couldn't schedule cron job" };
+    }
+  }
+  return pattern;
 }

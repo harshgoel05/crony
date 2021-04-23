@@ -7,7 +7,7 @@ export const cronSchema = yup.object({
   interval: yup.number().required(),
   measure: yup
     .string()
-    .oneOf(["hrs", "sec", "days", "month", "year", "day"])
+    .oneOf(["hrs", "sec", "min", "days", "month"])
     .required(),
 });
 
